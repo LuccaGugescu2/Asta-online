@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 
 public class Udp {
+    //224-239.0.0.0
     public static void sendUDPMessage(String message, String ipAddress, int port) throws IOException {
         DatagramSocket socket = new DatagramSocket();
         InetAddress group = InetAddress.getByName(ipAddress);
