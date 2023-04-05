@@ -19,11 +19,11 @@ CREATE TABLE `categorie` (
 CREATE TABLE `oggetti` (
   `OggettoID` int(2) NOT NULL,
   `NomeOggetto` varchar(9) DEFAULT NULL,
-  `CategoriaID` varchar(9) DEFAULT NULL,
+  `CategoriaID` int(1) DEFAULT NULL,
   `Quantita` int(1) DEFAULT NULL,
   `BaseAsta` float(1) DEFAULT NULL,
   `IpMulticast` varchar(9) DEFAULT NULL,
-  PRIMARY KEY (`StudioID`)
+  PRIMARY KEY (`OggettoID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `oggetti`

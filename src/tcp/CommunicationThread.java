@@ -1,5 +1,8 @@
 package tcp;
 
+import mySql.Categoria;
+import mySql.GestoreAsta;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -7,10 +10,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class CommunicationThread extends Thread {
 
     private Socket socket;
+    private GestoreAsta gestoreAsta;
 
     public CommunicationThread(Socket socket) {
         super();
@@ -20,6 +26,7 @@ public class CommunicationThread extends Thread {
     @Override
     public void run() {
         InputStream inputStreamServer;
+        ArrayList<Categoria> categorie = new ArrayList();
         try {
             inputStreamServer = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStreamServer));
@@ -27,25 +34,17 @@ public class CommunicationThread extends Thread {
             OutputStream outputStreamServer = socket.getOutputStream();
 
             DataOutputStream dataOutputStream = new DataOutputStream(outputStreamServer);
+            gestoreAsta = new GestoreAsta();
+            categorie = gestoreAsta.getCategorie();
+            gestoreAsta.close();
+            dataOutputStream.writeBytes(categorie.toString());
 
-            while(true) {
-                System.out.println("Sono in attesa di un messaggio dal client");
-
-                // METODO BLOCCANTE
-                String messaggio = bufferedReader.readLine();
-
-                System.out.println("Ricevuto dal client: " + messaggio);
-
-                String risposta = messaggio.toUpperCase() + "\n";
-                dataOutputStream.writeBytes(risposta);
-            }
-
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        if(socket != null) {
+        if (socket != null) {
             try {
                 socket.close();
             } catch (IOException e) {

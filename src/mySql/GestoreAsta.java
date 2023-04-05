@@ -1,9 +1,10 @@
 package mySql;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class GestoreAsta {
-    private String dbURL = "jdbc:mysql://localhost:3306/astaOnline";
+    private String dbURL = "jdbc:mysql://localhost:3306/asta";
     private String username = "root";
     private String password = "root";
     Connection connection;
@@ -32,6 +33,23 @@ public class GestoreAsta {
         String nome = result.getString("nome");
         return null;
     }
+    public ArrayList<Categoria> getCategorie() throws SQLException {
+        Statement stat = connection.createStatement();
+        ResultSet result = stat.executeQuery("" +
+                "SELECT NomeCategoria, CategoriaID FROM CATEGORIE"
+        );
+        ArrayList<Categoria> categorie = new ArrayList<>();
+        int id_categoria;
+        String nome_categoria;
+        while(result.next()) {
+            id_categoria = result.getInt("CategoriaID");
+            nome_categoria = result.getString("NomeCategoria");
+            Categoria categoria = new Categoria(id_categoria, nome_categoria);
+            categorie.add(categoria);
+        }
+        return categorie;
+    }
+
     public void close() throws SQLException {
         connection.close();
     }
