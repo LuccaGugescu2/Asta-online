@@ -11,8 +11,8 @@ public class GestoreAsta {
 
     public GestoreAsta() throws SQLException {
         try {
-            Connection conn = DriverManager.getConnection(dbURL, username, password);
-            if (conn != null) {
+            connection = DriverManager.getConnection(dbURL, username, password);
+            if (connection != null) {
                 System.out.println("Connected");
             }
         } catch (SQLException ex) {
@@ -25,7 +25,7 @@ public class GestoreAsta {
         Statement stat = connection.createStatement();
         ResultSet result = stat.executeQuery("" +
                 "SELECT OGGETTI.id_oggetto, OGGETTI.nome,  FROM CATEGORIE, OGGETTI" +
-                "WHERE CATEGORIE.id_categorie = OGGETTI.id_categorie"+
+                "WHERE CATEGORIE.id_categorie = OGGETTI.id_categorie" +
                 "AND OGGETTI.id_oggetto = " + id
         );
         result.next();
@@ -33,21 +33,48 @@ public class GestoreAsta {
         String nome = result.getString("nome");
         return null;
     }
+
     public ArrayList<Categoria> getCategorie() throws SQLException {
         Statement stat = connection.createStatement();
         ResultSet result = stat.executeQuery("" +
-                "SELECT NomeCategoria, CategoriaID FROM CATEGORIE"
+                "SELECT CategoriaID, NomeCategoria FROM CATEGORIE"
         );
         ArrayList<Categoria> categorie = new ArrayList<>();
         int id_categoria;
         String nome_categoria;
-        while(result.next()) {
+        while (result.next()) {
             id_categoria = result.getInt("CategoriaID");
             nome_categoria = result.getString("NomeCategoria");
+            System.out.println(id_categoria);
+            System.out.println(nome_categoria);
             Categoria categoria = new Categoria(id_categoria, nome_categoria);
             categorie.add(categoria);
         }
         return categorie;
+    }
+
+    public ArrayList<Oggetto> getOggettiByIdCategoria(int idCategoria) throws SQLException {
+        Statement stat = connection.createStatement();
+
+        ResultSet result = stat.executeQuery("" +
+                "SELECT * FROM oggetti WHERE CategoriaID = " + idCategoria
+        );
+        ArrayList<Oggetto> oggetti = new ArrayList<>();
+        int idOggetto;
+        String nomeOggetto;
+        int quantita;
+        float baseAsta;
+        String ipMulticast;
+        while (result.next()) {
+            idOggetto = result.getInt("OggettoID");
+            nomeOggetto = result.getString("NomeOggetto");
+            quantita = result.getInt("Quantita");
+            baseAsta = result.getFloat("BaseAsta");
+            ipMulticast = result.getString("IpMulticast");
+            oggetti.add(new Oggetto(idOggetto, nomeOggetto, idCategoria, quantita, baseAsta, ipMulticast));
+        }
+
+        return oggetti;
     }
 
     public void close() throws SQLException {

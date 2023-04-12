@@ -3,16 +3,26 @@ package mySql;
 public class Oggetto {
     private int id;
     private String nome;
-    private Categoria categoria;
+    private int idCategoria;
     private int quntità;
     private float base_asta;
+    private String ipMultiCast;
 
-    public Oggetto(int id, String nome, Categoria categoria, int quntità, float base_asta) {
+    public Oggetto(int id, String nome, int idCategoria, int quntità, float base_asta, String ipMultiCast) {
         this.id = id;
         this.nome = nome;
-        this.categoria = categoria;
+        this.idCategoria = idCategoria;
         this.quntità = quntità;
         this.base_asta = base_asta;
+        this.ipMultiCast = ipMultiCast;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public String getIpMultiCast() {
+        return ipMultiCast;
     }
 
     public int getId() {
@@ -23,8 +33,8 @@ public class Oggetto {
         return nome;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public int getCategoria() {
+        return idCategoria;
     }
 
     public int getQuntità() {

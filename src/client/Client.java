@@ -1,7 +1,11 @@
 package client;
 
+import mySql.Categoria;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args) {
@@ -12,25 +16,40 @@ public class Client {
             // 1 - crea una socket con i riferimenti del server
             comunicationSocketFromClient = new Socket("localhost", 5000);
 
-
             OutputStream outputStreamClient = comunicationSocketFromClient.getOutputStream();
-            DataOutputStream dataOutputStream = new DataOutputStream(outputStreamClient);
-
+            DataOutputStream output = new DataOutputStream(outputStreamClient);
             InputStream inputStreamClient = comunicationSocketFromClient.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStreamClient));
+            DataInputStream input = new DataInputStream(inputStreamClient);
 
-            String messaggio = "cippa";
 
-//            do {
-//                dataOutputStream.writeBytes(messaggio + "\n");
-//
-//                System.out.println("Sono in attesa di una risposta dal server");
-//
-//                // METODO BLOCCANTE
-//                String risposta = bufferedReader.readLine();
-//
-//                System.out.println("Ricevuto dal server: " + risposta);
-//            } while (!messaggio.equals("esco"));
+            int numeroCategorie;
+            ArrayList<Categoria> categorie = new ArrayList<>();
+            System.out.println("Sono in attesa di una risposta dal server");
+
+            // METODO BLOCCANTE
+            numeroCategorie = input.readInt();
+            for (int i = 0; i < numeroCategorie; i++) {
+                int idCategoria = input.readInt();
+                String nomeCategoria = input.readUTF();
+                System.out.print("id: " + idCategoria + ", nomeCategoria: " + nomeCategoria + "\n");
+
+                categorie.add(new Categoria(idCategoria, nomeCategoria));
+            }
+            Scanner scan = new Scanner(System.in);
+            System.out.println("----------INSERISCI ID CATEGORIA:--------------------");
+            int choosed = scan.nextInt();
+            output.writeInt(choosed);
+            int oggettiSize = input.readInt();
+            for (int i = 0; i < oggettiSize; i++) {
+                int idOggetto = input.readInt();
+                String nome = input.readUTF();
+                int quantita = input.readInt();
+                int id_categoria = input.readInt();
+                float baseAsta = input.readFloat();
+                String ipMultiCast = input.readUTF();
+            }
+            comunicationSocketFromClient.close();
+
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -38,11 +57,11 @@ public class Client {
         }
 
 
-        if(comunicationSocketFromClient != null) {
+        if (comunicationSocketFromClient != null) {
             try {
                 comunicationSocketFromClient.close();
             } catch (IOException e) {
-
+                e.printStackTrace();
             }
         }
 

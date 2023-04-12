@@ -5,6 +5,7 @@ import tcp.CommunicationThread;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class Server {
     public static void main(String[] args) {
@@ -29,7 +30,7 @@ public class Server {
 
                 comunicationThread.start();
             }
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

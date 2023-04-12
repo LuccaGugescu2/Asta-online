@@ -44,3 +44,11 @@ ALTER TABLE `clienti`
   ADD CONSTRAINT `FK1_clienti` FOREIGN KEY (`OggettoID`) REFERENCES `oggetti` (`OggettoID`);
 
 COMMIT;
+
+
+INSERT INTO categorie(CategoriaID, NomeCategoria)
+VALUES
+(0, "Auto"),
+(1, "Telefoni"),
+(2, "Computer"),
+(3, "Libri");
