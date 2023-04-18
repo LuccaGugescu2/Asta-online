@@ -21,12 +21,11 @@ public class GestoreAsta {
     }
 
     public Oggetto getOggetto(int id) throws SQLException {
-
         Statement stat = connection.createStatement();
         ResultSet result = stat.executeQuery("" +
-                "SELECT OGGETTI.id_oggetto, OGGETTI.nome,  FROM CATEGORIE, OGGETTI" +
-                "WHERE CATEGORIE.id_categorie = OGGETTI.id_categorie" +
-                "AND OGGETTI.id_oggetto = " + id
+                "SELECT oggetti.id_oggetto, oggetti.nome,  FROM categoire, oggetti" +
+                "WHERE categorie.id_categorie = oggetti.id_categorie" +
+                "AND oggetti.id_oggetto = " + id
         );
         result.next();
         int id_oggetto = result.getInt("id_oggetto");
@@ -37,7 +36,7 @@ public class GestoreAsta {
     public ArrayList<Categoria> getCategorie() throws SQLException {
         Statement stat = connection.createStatement();
         ResultSet result = stat.executeQuery("" +
-                "SELECT CategoriaID, NomeCategoria FROM CATEGORIE"
+                "SELECT CategoriaID, NomeCategoria FROM categorie"
         );
         ArrayList<Categoria> categorie = new ArrayList<>();
         int id_categoria;
@@ -73,7 +72,6 @@ public class GestoreAsta {
             ipMulticast = result.getString("IpMulticast");
             oggetti.add(new Oggetto(idOggetto, nomeOggetto, idCategoria, quantita, baseAsta, ipMulticast));
         }
-
         return oggetti;
     }
 

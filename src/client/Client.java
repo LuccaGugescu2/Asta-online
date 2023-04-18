@@ -1,26 +1,28 @@
 package client;
 
+import jdk.dynalink.linker.LinkerServices;
 import mySql.Categoria;
+import mySql.Oggetto;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Client {
     public static void main(String[] args) {
-
         Socket comunicationSocketFromClient = null;
+        List<Oggetto> oggetti = new ArrayList<>();
 
         try {
             // 1 - crea una socket con i riferimenti del server
-            comunicationSocketFromClient = new Socket("localhost", 5000);
+            comunicationSocketFromClient = new Socket("localhost", 5001);
 
             OutputStream outputStreamClient = comunicationSocketFromClient.getOutputStream();
             DataOutputStream output = new DataOutputStream(outputStreamClient);
             InputStream inputStreamClient = comunicationSocketFromClient.getInputStream();
             DataInputStream input = new DataInputStream(inputStreamClient);
-
 
             int numeroCategorie;
             ArrayList<Categoria> categorie = new ArrayList<>();
@@ -38,6 +40,7 @@ public class Client {
             Scanner scan = new Scanner(System.in);
             System.out.println("----------INSERISCI ID CATEGORIA:--------------------");
             int choosed = scan.nextInt();
+            scan.close();
             output.writeInt(choosed);
             int oggettiSize = input.readInt();
             for (int i = 0; i < oggettiSize; i++) {
@@ -47,10 +50,20 @@ public class Client {
                 int id_categoria = input.readInt();
                 float baseAsta = input.readFloat();
                 String ipMultiCast = input.readUTF();
+                Oggetto oggetto = new Oggetto(idOggetto,nome,quantita,id_categoria,baseAsta,ipMultiCast);
+                oggetti.add(oggetto);
             }
+
+            System.out.println("lista oggetti...");
+            for (Oggetto e: oggetti) {
+                System.out.println(e.toString());
+            }
+
+            System.out.println("seleziona un oggetto");
+            int select = scan.nextInt();
+            output.writeInt(select);
+
             comunicationSocketFromClient.close();
-
-
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

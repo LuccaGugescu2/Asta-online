@@ -14,7 +14,7 @@ public class Server {
 
         try {
             // 1 - pubblicare una ServerSocket, decidendo una porta NON RISERVATA
-            serverSocket = new ServerSocket(5000);
+            serverSocket = new ServerSocket(5001);
 
             while (true) {
                 // 2 - mettersi in attesa di ricevere richieste dai client, ed accettarle

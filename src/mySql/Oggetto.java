@@ -44,4 +44,9 @@ public class Oggetto {
     public float getBase_asta() {
         return base_asta;
     }
+
+    @Override
+    public String toString() {
+        return id+") "+nome;
+    }
 }
