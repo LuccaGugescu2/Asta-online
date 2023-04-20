@@ -49,8 +49,6 @@ public class CommunicationThread extends Thread {
                 dataOutputStream.writeFloat(oggetti.get(i).getBase_asta());
                 dataOutputStream.writeUTF(oggetti.get(i).getIpMultiCast());
             }
-            int selectedObject = input.readInt();
-            String ipMultiCast = oggetti.get(selectedObject).getIpMultiCast();
         } catch (IOException | SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

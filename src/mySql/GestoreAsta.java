@@ -75,6 +75,21 @@ public class GestoreAsta {
         return oggetti;
     }
 
+    public ArrayList<String> getIpMultiCast() throws SQLException {
+        Statement stat = connection.createStatement();
+
+        ResultSet result = stat.executeQuery("" +
+                "SELECT IpMulticast FROM oggetti"
+        );
+        ArrayList<String> listIp = new ArrayList<>();
+        String ipMulticast;
+        while (result.next()) {
+            ipMulticast = result.getString("IpMulticast");
+            listIp.add(ipMulticast);
+        }
+        return listIp;
+    }
+
     public void close() throws SQLException {
         connection.close();
     }

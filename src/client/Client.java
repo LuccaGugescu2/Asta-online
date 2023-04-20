@@ -1,8 +1,8 @@
 package client;
 
-import jdk.dynalink.linker.LinkerServices;
 import mySql.Categoria;
 import mySql.Oggetto;
+import udp.Udp;
 
 import java.io.*;
 import java.net.Socket;
@@ -40,7 +40,6 @@ public class Client {
             Scanner scan = new Scanner(System.in);
             System.out.println("----------INSERISCI ID CATEGORIA:--------------------");
             int choosed = scan.nextInt();
-            scan.close();
             output.writeInt(choosed);
             int oggettiSize = input.readInt();
             for (int i = 0; i < oggettiSize; i++) {
@@ -61,7 +60,9 @@ public class Client {
 
             System.out.println("seleziona un oggetto");
             int select = scan.nextInt();
-            output.writeInt(select);
+            Udp udp = new Udp();
+            udp.sendUDPMessage(oggetti.get(select).getIpMultiCast(), "localhost", 4322);
+            udp.receiveMulticastUDPMessage(oggetti.get(select).getIpMultiCast(), 4321);
 
             comunicationSocketFromClient.close();
         } catch (IOException e) {
