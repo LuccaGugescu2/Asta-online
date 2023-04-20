@@ -1,11 +1,11 @@
 package client;
 
+import jdk.dynalink.linker.LinkerServices;
 import mySql.Categoria;
 import mySql.Oggetto;
-import udp.Udp;
 
 import java.io.*;
-import java.net.Socket;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -60,16 +60,37 @@ public class Client {
 
             System.out.println("seleziona un oggetto");
             int select = scan.nextInt();
-            Udp udp = new Udp();
-            udp.sendUDPMessage(oggetti.get(select).getIpMultiCast(), "localhost", 4322);
-            udp.receiveMulticastUDPMessage(oggetti.get(select).getIpMultiCast(), 4321);
+            System.out.println(oggetti.get(select).stampaInformazioni());
+            output.writeInt(select);
+
+            int mcPort = 12345;
+            String mcIPStr = oggetti.get(select).getIpMultiCast();
+            DatagramSocket udpSocket = new DatagramSocket();
+            InetAddress mcIPAddress = InetAddress.getByName(mcIPStr);
+            String msgInput;
+            do{
+                System.out.println("fai un offerta");
+                String offer = scan.next();
+                output.writeUTF(offer);
+                byte[] msg = offer.getBytes();
+                DatagramPacket packet = new DatagramPacket(msg, msg.length);
+                packet.setAddress(mcIPAddress);
+                packet.setPort(mcPort);
+                udpSocket.send(packet);
+                DatagramPacket packetInput = new DatagramPacket(new byte[1024], 1024);
+                msgInput = new String(packetInput.getData(), packetInput.getOffset(),
+                        packetInput.getLength());
+                System.out.println(msgInput);
+            }while(msgInput.equals("esci"));
+            udpSocket.close();
+            System.out.println("Sent a  multicast message.");
+            System.out.println("Exiting application");
 
             comunicationSocketFromClient.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
 
         if (comunicationSocketFromClient != null) {
             try {

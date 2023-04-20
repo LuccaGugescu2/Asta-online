@@ -3,8 +3,7 @@ package server;
 import tcp.CommunicationThread;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.sql.SQLException;
 
 public class Server {

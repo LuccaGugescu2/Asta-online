@@ -33,6 +33,12 @@ public class GestoreAsta {
         return null;
     }
 
+    public void compraOggetto(int id) throws SQLException {
+        Statement stat = connection.createStatement();
+        ResultSet result = stat.executeQuery("SELECT oggetti.quantita FROM oggetti WHERE oggetti.id = "+id);
+
+    }
+
     public ArrayList<Categoria> getCategorie() throws SQLException {
         Statement stat = connection.createStatement();
         ResultSet result = stat.executeQuery("" +
@@ -75,19 +81,16 @@ public class GestoreAsta {
         return oggetti;
     }
 
-    public ArrayList<String> getIpMultiCast() throws SQLException {
+    public ArrayList<String> selectAllObjects() throws SQLException {
         Statement stat = connection.createStatement();
-
         ResultSet result = stat.executeQuery("" +
-                "SELECT IpMulticast FROM oggetti"
-        );
-        ArrayList<String> listIp = new ArrayList<>();
-        String ipMulticast;
+                "SELECT * FROM oggetti");
+        ArrayList<String> ip = new ArrayList<>();
+
         while (result.next()) {
-            ipMulticast = result.getString("IpMulticast");
-            listIp.add(ipMulticast);
+            ip.add(result.getString("IpMulticast"));
         }
-        return listIp;
+        return ip;
     }
 
     public void close() throws SQLException {

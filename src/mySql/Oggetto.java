@@ -49,4 +49,8 @@ public class Oggetto {
     public String toString() {
         return id+") "+nome;
     }
+
+    public String stampaInformazioni(){
+        return "nome: "+nome+"\nbaseAsta: "+base_asta+"\nquantita: "+quntità;
+    }
 }
